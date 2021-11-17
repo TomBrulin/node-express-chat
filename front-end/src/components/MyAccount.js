@@ -7,7 +7,6 @@ function MyAccount({ username }) {
             </div>
             <div className="name">
                 <span>{ username }</span>
-                <i className="fa fa-angle-down"/>
                 <span className="availability">En ligne</span>
             </div>
         </div>

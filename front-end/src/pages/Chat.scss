@@ -302,6 +302,7 @@ b {
     right: 0;
     bottom: 44px;
     overflow-y: auto;
+    overflow-x: hidden;
     outline: none;
 }
 
@@ -381,10 +382,10 @@ b {
     border-radius: 5px;
     overflow: hidden;
     float: left;
+    width: 80%;
 }
 
 .input-area .input-wrapper input {
-    height: 30px;
     line-height: 30px;
     border: 0;
     margin: 0;
@@ -392,6 +393,7 @@ b {
     outline: none;
     color: #5D7185;
     min-width: 271px;
+    height: 36px;
 }
 
 .input-area .input-wrapper i {
@@ -560,4 +562,8 @@ ul.tabs-container {
 
 .jspVerticalBar {
     width: 7px;
+}
+
+.send-btn {
+    width: 18%;
 }

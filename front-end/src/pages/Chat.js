@@ -3,8 +3,19 @@ import Message from '../components/Message';
 import SendMessage from '../components/SendMessage';
 import MyAccount from '../components/MyAccount';
 import UsersList from '../components/UsersList';
+import { useEffect, useRef } from 'react';
 
-function Chat({ data, socket, users, messages }) {
+function Chat({ data, socket, users, messages, totalMessages }) {
+    const endMessagesRef = useRef();
+
+    const scrollToBottom = () => {
+        endMessagesRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
     return (
         <div className="window-wrapper">
             <div className="window-title">
@@ -23,7 +34,7 @@ function Chat({ data, socket, users, messages }) {
                         <li className="item active">
                             <a href="#">
                                 <i className="fa fa-globe"/>
-                                <span>Général</span>
+                                <span>Général ({totalMessages} {totalMessages > 0 ? "messages" : "message"})</span>
                             </a>
                         </li>
                     </ul>
@@ -32,7 +43,7 @@ function Chat({ data, socket, users, messages }) {
                 </div>
 
                 <div className="chat-area">
-                    <div className="title"><b>Général</b></div>
+                    <div className="title"><b>Général ({totalMessages} {totalMessages > 0 ? "messages" : "message"})</b></div>
                     <div className="chat-list">
                         <ul>
                             {
@@ -41,6 +52,7 @@ function Chat({ data, socket, users, messages }) {
                                 )))
                             }
                         </ul>
+                        <div ref={endMessagesRef}/>
                     </div>
 
                     <SendMessage socket={socket} />

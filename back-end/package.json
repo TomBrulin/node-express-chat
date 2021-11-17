@@ -9,8 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "french-badwords-list": "^1.0.5",
+    "leo-profanity": "^1.5.0",
     "mongoose": "^6.0.12",
     "socket.io": "^4.3.1"
   }

@@ -2,8 +2,9 @@ import './Login.scss';
 import { useEffect, useRef, useState } from 'react';
 
 function Login({ setData, socket }) {
-    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
     const usernameRef = useRef();
+    const passwordRef = useRef();
 
     useEffect(() => {
         socket.on('CONNECTION_ACCEPTED', (username, socketId) => {
@@ -13,28 +14,58 @@ function Login({ setData, socket }) {
             });
         });
 
-        socket.on('CONNECTION_DENIED', () => {
-            setError('Nom d\'utilisateur ou mot de passe incorrect');
+        socket.on('SEND_AUTH_MESSAGE', (msg) => {
+            setMessage(msg);
         });
 
         return () => {
             socket.off('CONNECTION_ACCEPTED');
-            socket.off('CONNECTION_DENIED');
+            socket.off('SEND_AUTH_MESSAGE');
         };
-    }, [socket, setData]);
+    }, [socket]);
 
 
     function handleLogin(e) {
         e.preventDefault();
 
         const username = usernameRef.current.value;
+        const password = passwordRef.current.value;
 
         if (username === '') {
-            setError('Veuillez saisir un nom d\'utilisateur');
+            setMessage('Veuillez saisir un nom d\'utilisateur');
             return;
         }
 
-        socket.emit('TRY_TO_CONNECT', username, 'password here');
+        if (password === '') {
+            setMessage('Veuillez saisir un mot de passe');
+            return;
+        }
+
+        socket.emit('TRY_TO_CONNECT', username, password);
+    }
+
+    function handleRegister(e) {
+        e.preventDefault();
+
+        const username = usernameRef.current.value;
+        const password = passwordRef.current.value;
+
+        if (username === '') {
+            setMessage('Veuillez saisir un nom d\'utilisateur');
+            return;
+        }
+
+        if (username.includes(' ')) {
+            setMessage('Veuillez ne pas mettre d\'espace dans le nom d\'utilisateur !');
+            return;
+        }
+
+        if (password === '') {
+            setMessage('Veuillez saisir un mot de passe');
+            return;
+        }
+
+        socket.emit('REGISTER', username, password);
     }
 
     return (
@@ -44,11 +75,15 @@ function Login({ setData, socket }) {
 
                 <br />
 
-                <div id="error" className="error">{error}</div>
+                <div id="error" className="error">{message}</div>
 
                 <form className="form" id="signup">
                     <input type="text" id="username" placeholder="Nom d'utilisateur" ref={usernameRef} required />
+                    <input type="password" id="password" placeholder="Mot de passe" ref={passwordRef} required />
                     <button className="loginbutton" onClick={handleLogin}>Se connecter</button>
+                    <br />
+                    <br />
+                    <button className="loginbutton" onClick={handleRegister}>S'inscrire</button>
                 </form>
             </div>
         </div>
